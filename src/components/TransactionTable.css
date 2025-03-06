@@ -27,3 +27,11 @@
     background-color: #f9fafb;
   }
   
+  .amount-positive {
+    color: #10b981; /* зелено */
+  }
+  
+  .amount-negative {
+    color: #ef4444; /* червено */
+  }
+  

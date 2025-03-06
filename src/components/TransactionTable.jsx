@@ -15,7 +15,7 @@ export default function TransactionTable({ transactions }) {
           {transactions.map((tx) => (
             <tr key={tx.id}>
               <td>{tx.description}</td>
-              <td style={{ color: tx.amount >= 0 ? "#10b981" : "#ef4444" }}>
+              <td className={tx.amount >= 0 ? "amount-positive" : "amount-negative"}>
                 {tx.amount}$
               </td>
               <td>{new Date(tx.date).toLocaleDateString()}</td>
