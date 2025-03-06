@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { getTransactions } from '../services/transactionService';
+import { useEffect, useState } from "react";
+import { getTransactions } from "../services/transactionService";
+import TransactionTable from "../components/TransactionTable";
 
 export default function TransactionsPage() {
   const [transactions, setTransactions] = useState([]);
@@ -12,7 +13,7 @@ export default function TransactionsPage() {
         const data = await getTransactions();
         setTransactions(data);
       } catch (err) {
-        setError('Failed to load transactions.');
+        setError("Failed to load transactions.");
       } finally {
         setLoading(false);
       }
@@ -27,24 +28,7 @@ export default function TransactionsPage() {
   return (
     <div>
       <h1>Transactions</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Description</th>
-            <th>Amount</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {transactions.map((tx) => (
-            <tr key={tx.id}>
-              <td>{tx.description}</td>
-              <td>{tx.amount}</td>
-              <td>{new Date(tx.date).toLocaleDateString()}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <TransactionTable transactions={transactions} />
     </div>
   );
 }
