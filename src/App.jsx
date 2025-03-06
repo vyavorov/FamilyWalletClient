@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import HomePage from './pages/HomePage';
 import TransactionsPage from './pages/TransactionsPage';
-import Layout from './components/Layout.js';
+import Layout from './components/Layout';
 
 function App() {
   return (
