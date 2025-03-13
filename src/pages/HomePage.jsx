@@ -9,19 +9,18 @@ export default function HomePage() {
   const [error, setError] = useState(null);
   const [dashboardData, setDashboardData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const data = await getDashboardData();
-        setDashboardData(data);
-      } catch (err) {
-        setError("Failed to load dashboard data.");
-      } finally {
-        setLoading(false);
-      }
-    }
 
-    fetchData();
+  async function updateDashboardData() {
+    try {
+      const data = await getDashboardData();
+      setDashboardData(data);
+    } catch (err) {
+      console.error("Error updating dashboard data:", err);
+    }
+  }
+  
+  useEffect(() => {
+    updateDashboardData();
   }, []);
 
   return (
@@ -36,7 +35,7 @@ export default function HomePage() {
         <BalanceCard title="Expenses" amount={dashboardData.expense} type="expense" />
       </div>
 
-      {isModalOpen && <AddTransactionModal onClose={() => setIsModalOpen(false)} />}
+      {isModalOpen && <AddTransactionModal onTransactionAdded={updateDashboardData} onClose={() => setIsModalOpen(false)} />}
     </div>
   );
 }

@@ -4,12 +4,12 @@ import { createTransaction } from "../services/transactionService";
 import { getCategories } from "../services/categoryService";
 import { getAccounts } from "../services/accountService";
 
-export default function AddTransactionModal({ onClose }) {
+export default function AddTransactionModal({ onClose, onTransactionAdded }) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
   const [account, setAccount] = useState("");
-  const [type, setType] = useState("expense"); // income/expense
+  const [type, setType] = useState("expense");
   const [categories, setCategories] = useState([]);
   const [accounts, setAccounts] = useState([]);
 
@@ -42,8 +42,8 @@ export default function AddTransactionModal({ onClose }) {
 
     try {
       await createTransaction(transactionData);
-      onClose(); // Затваряме модала
-      window.location.reload(); // Рефрешваме данните (можем да го заменим с по-добро решение по-късно)
+      onTransactionAdded();
+      onClose();
     } catch (error) {
       console.error("Error creating transaction:", error);
     }
