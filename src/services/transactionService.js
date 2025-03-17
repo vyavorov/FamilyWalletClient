@@ -1,10 +1,11 @@
-import axios from 'axios';
+// import axios from 'axios';
+import API from "./api";
 
 const API_URL = 'https://localhost:7271/api/Transaction';
 
 export async function getTransactions() {
   try {
-    const response = await axios.get(API_URL);
+    const response = await API.get(API_URL);
     return response.data;
   } catch (error) {
     console.error('Error fetching transactions:', error);
@@ -19,8 +20,8 @@ const TRANSACTION_TYPES = {
 
 export async function createTransaction(transaction) {
   try {
-    const userId = await axios.get(API_URL,)
-    const response = await axios.post(API_URL, {
+    const userId = await API.get(API_URL,)
+    const response = await API.post(API_URL, {
       ...transaction,
       type: TRANSACTION_TYPES[transaction.type],
       userId: 1, //TODO: implement user authentication

@@ -1,0 +1,30 @@
+// import axios from "axios";
+import API from "./api";
+import { jwtDecode } from "jwt-decode";
+
+const API_URL = "https://localhost:7271/api/User";
+
+export async function login(email, password) {
+    try {
+      const response = await API.post(`${API_URL}/login`, { email, password });
+      const token = response.data.token;
+      const decodedUser = jwtDecode(token);
+      return { user: decodedUser, token };
+    } catch (error) {
+      throw new Error("Invalid email or password.");
+    }
+  }
+
+export async function register(name, email, password) {
+  try {
+    const response = await API.post(`${API_URL}/register`, {
+      name,
+      email,
+      password,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Registration failed:", error);
+    throw error;
+  }
+}

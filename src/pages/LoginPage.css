@@ -1,0 +1,83 @@
+/* Центриране на логин формата */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f4f4f4;
+  }
+  
+  /* Логин карта */
+  .login-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    text-align: center;
+  }
+  
+  /* Заглавие */
+  .login-card h2 {
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+    color: #333;
+  }
+  
+  .login-card p {
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  /* Грешка */
+  .error-message {
+    color: red;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
+  
+  /* Полета за вход */
+  .input-group {
+    margin-bottom: 15px;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  /* Бутон за вход */
+  .login-btn {
+    width: 100%;
+    padding: 10px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .login-btn:hover {
+    background: #45a049;
+  }
+  
+  /* Линк за регистрация */
+  .register-link {
+    margin-top: 10px;
+    font-size: 0.9rem;
+  }
+  
+  .register-link a {
+    color: #4CAF50;
+    text-decoration: none;
+  }
+  
+  .register-link a:hover {
+    text-decoration: underline;
+  }
+  

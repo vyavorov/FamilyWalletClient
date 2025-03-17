@@ -1,23 +1,42 @@
 import { Link } from "react-router-dom";
-import "./Layout.css";
+import { useContext } from "react";
+import AuthContext from "../context/AuthContext";
+import "./Layout.css"; // Външен CSS файл за стилове
 
 export default function Layout({ children }) {
+  const { user, logout } = useContext(AuthContext);
+
   return (
-    <>
-      <header className="header">
-        <h1 className="header-title">Family Wallet</h1>
-        <nav className="nav-links">
-          <Link to="/">Home</Link>
-          <Link to="/transactions">Transactions</Link>
-          <Link to="/accounts">Accounts</Link>
-        </nav>
-      </header>
+    <div className="layout">
+      {/* Навигация */}
+      <nav className="navbar">
+        <div className="navbar-container">
+          <Link to="/" className="logo">FamilyWallet</Link>
+          <ul className="nav-links">
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/transactions">Transactions</Link></li>
+            <li><Link to="/accounts">Accounts</Link></li>
+          </ul>
+          <div className="auth-buttons">
+            {user ? (
+              <>
+                <span className="username">{user.email}</span>
+                <button className="logout-btn" onClick={logout}>Logout</button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="auth-link">Login</Link>
+                <Link to="/register" className="auth-link">Register</Link>
+              </>
+            )}
+          </div>
+        </div>
+      </nav>
 
-      <main className="main-content">{children}</main>
-
-      <footer className="footer">
-        © 2024 Family Wallet
-      </footer>
-    </>
+      {/* Основно съдържание */}
+      <main className="main-content">
+        {children}
+      </main>
+    </div>
   );
 }
