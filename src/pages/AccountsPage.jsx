@@ -12,6 +12,9 @@ export default function AccountsPage() {
     async function fetchData() {
       try {
         const data = await getAccounts();
+        if (data.length === 0) {
+          setError("No accounts found.");
+        }
         setAccounts(data);
       } catch (err) {
         setError("Failed to load accounts.");
