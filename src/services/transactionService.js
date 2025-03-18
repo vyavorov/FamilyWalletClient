@@ -22,7 +22,7 @@ const TRANSACTION_TYPES = {
 export async function createTransaction(transaction,token) {
   try {
     const decodedUser = jwtDecode(token);
-    const userId = decodedUser["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+    const userId = decodedUser["userId"];
     const response = await API.post(API_URL, {
       ...transaction,
       type: TRANSACTION_TYPES[transaction.type],
