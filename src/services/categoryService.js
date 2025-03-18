@@ -5,7 +5,7 @@ const API_URL = "https://localhost:7271/api/Category"; // Замени с тво
 
 export async function getCategories() {
   try {
-    const response = await API.get(API_URL);
+    const response = await API.get(API_URL + "/user");
     return response.data;
   } catch (error) {
     console.error("Error fetching categories:", error);

@@ -1,5 +1,6 @@
 // import axios from 'axios';
 import API from "./api";
+import { jwtDecode } from "jwt-decode";
 
 const API_URL = 'https://localhost:7271/api/Transaction';
 
@@ -18,13 +19,14 @@ const TRANSACTION_TYPES = {
   expense: 1, 
 };
 
-export async function createTransaction(transaction) {
+export async function createTransaction(transaction,token) {
   try {
-    const userId = await API.get(API_URL,)
+    const decodedUser = jwtDecode(token);
+    const userId = decodedUser["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
     const response = await API.post(API_URL, {
       ...transaction,
       type: TRANSACTION_TYPES[transaction.type],
-      userId: 1, //TODO: implement user authentication
+      userId: userId,
     },
     {
       headers: {

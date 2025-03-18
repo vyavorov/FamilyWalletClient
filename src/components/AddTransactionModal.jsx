@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import "./AddTransactionModal.css";
 import { createTransaction } from "../services/transactionService";
 import { getCategories } from "../services/categoryService";
 import { getAccounts } from "../services/accountService";
+import AuthContext from "../context/AuthContext";
 
 export default function AddTransactionModal({ onClose, onTransactionAdded }) {
   const [description, setDescription] = useState("");
@@ -12,6 +13,7 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
   const [type, setType] = useState("expense");
   const [categories, setCategories] = useState([]);
   const [accounts, setAccounts] = useState([]);
+  const { token } = useContext(AuthContext);
 
   useEffect(() => {
     async function fetchData() {
@@ -39,9 +41,10 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
       categoryId: category,
       accountId: account,
     };
+    
 
     try {
-      await createTransaction(transactionData);
+      await createTransaction(transactionData,token);
       onTransactionAdded();
       onClose();
     } catch (error) {
