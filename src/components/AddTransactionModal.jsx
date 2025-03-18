@@ -40,6 +40,7 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
       type,
       categoryId: category,
       accountId: account,
+      date: new Date().toISOString()
     };
     
 
