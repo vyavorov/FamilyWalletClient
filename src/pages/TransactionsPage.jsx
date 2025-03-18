@@ -11,7 +11,12 @@ export default function TransactionsPage() {
     async function fetchData() {
       try {
         const data = await getTransactions();
-        setTransactions(data);
+        if (data.length === 0) {
+          setError("No transactions found.");
+        }
+        else {
+          setTransactions(data);
+        }
       } catch (err) {
         setError("Failed to load transactions.");
       } finally {

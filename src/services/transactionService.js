@@ -5,7 +5,7 @@ const API_URL = 'https://localhost:7271/api/Transaction';
 
 export async function getTransactions() {
   try {
-    const response = await API.get(API_URL);
+    const response = await API.get(API_URL + '/user');
     return response.data;
   } catch (error) {
     console.error('Error fetching transactions:', error);
@@ -14,8 +14,8 @@ export async function getTransactions() {
 }
 
 const TRANSACTION_TYPES = {
-  income: 0,  // Ако enum в C# е дефиниран с 0 за income
-  expense: 1, // Ако 1 е за expense
+  income: 0,  
+  expense: 1, 
 };
 
 export async function createTransaction(transaction) {
