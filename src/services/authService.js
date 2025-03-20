@@ -28,3 +28,9 @@ export async function register(name, email, password) {
     throw error;
   }
 }
+
+export const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  window.location.href = "/login"; // Пренасочване към login страницата
+};
