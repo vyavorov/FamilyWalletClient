@@ -54,6 +54,9 @@
   }
   
   .transaction-description,
-  .transaction-amount {
+  .transaction-amount,
+  .account-title,
+  .account-balance
+   {
     width: 93% !important;
   }

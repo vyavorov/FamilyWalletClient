@@ -9,6 +9,21 @@
     grid-template-columns: 1fr;
     gap: 24px;
   }
+
+  .add-account-btn {
+    background-color: #3b82f6;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .add-account-btn:hover {
+    background-color: #2563eb;
+  }
   
   @media (min-width: 768px) {
     .accounts-grid {
