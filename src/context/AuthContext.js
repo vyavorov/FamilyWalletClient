@@ -3,7 +3,7 @@ import { createContext, useState, useEffect } from "react";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(localStorage.getItem("user") || null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
 
   useEffect(() => {
@@ -14,6 +14,14 @@ export function AuthProvider({ children }) {
     }
   }, [token]);
 
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
+    }
+  }, [user]);
+
   const login = (userData, authToken) => {
     setUser(userData);
     setToken(authToken);
@@ -23,6 +31,7 @@ export function AuthProvider({ children }) {
     setUser(null);
     setToken(null);
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
   };
 
   return (
