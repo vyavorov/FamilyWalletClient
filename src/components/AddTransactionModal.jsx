@@ -14,6 +14,7 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
   const [categories, setCategories] = useState([]);
   const [accounts, setAccounts] = useState([]);
   const { token } = useContext(AuthContext);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     async function fetchData() {
@@ -34,22 +35,35 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
   async function handleSubmit(e) {
     e.preventDefault();
 
+    if (!description || !amount || !category || !account) {
+      setError("All fields are required.");
+      return;
+    }
+    
     const transactionData = {
       description,
       amount: parseFloat(amount),
       type,
-      categoryId: category,
-      accountId: account,
+      categoryId: category || null,
+      accountId: account || null,
       date: new Date().toISOString()
     };
     
 
     try {
-      await createTransaction(transactionData,token);
-      onTransactionAdded();
-      onClose();
+      const response = await createTransaction(transactionData,token);
+      if (response.success) {
+        onTransactionAdded();
+        onClose();
+        setError('');
+      }
+      else {
+        setError(response.message);
+        console.log(response.message);
+      }
     } catch (error) {
       console.error("Error creating transaction:", error);
+
     }
   }
 
@@ -115,7 +129,7 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
               ))}
             </select>
           </label>
-
+          {error && <p className="error-message">{error}</p>}
           <button type="submit">Save</button>
           <button type="button" className="close-btn" onClick={onClose}>
             Cancel

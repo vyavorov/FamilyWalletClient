@@ -35,7 +35,22 @@ export async function createTransaction(transaction,token) {
     });
     return response.data;
   } catch (error) {
-    console.error("Error creating transaction:", error);
-    throw error;
+    if (error.response) {
+      console.error("API Error:", error.response.data);
+
+      // Ако има обект с грешки, събираме ги в един string
+      let errorMessage = "Transaction failed.";
+      if (error.response.data.errors) {
+        errorMessage = Object.values(error.response.data.errors)
+          .flat()
+          .join(" "); // Конвертира всички грешки в един string
+      } else if (error.response.data.message) {
+        errorMessage = error.response.data.message;
+      }
+
+      return { success: false, message: errorMessage };
+    }
+
+    return { success: false, message: "A network error occurred. Please try again." };
   }
 }
