@@ -81,3 +81,16 @@ export async function editTransaction(transactionId, newTransactionData,token) {
     throw error;
   }
 }
+
+export async function deleteTransaction(transactionId,token) {
+  try {
+    const decodedUser = jwtDecode(token);
+    const userId = decodedUser["userId"];
+
+    const response = await API.delete(`${API_URL}/${transactionId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error editing transaction:", error);
+    throw error;
+  }
+}

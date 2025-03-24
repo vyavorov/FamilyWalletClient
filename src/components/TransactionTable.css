@@ -35,3 +35,41 @@
     color: #ef4444; /* червено */
   }
   
+  .transaction-table td:last-child {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  /* Общ стил за всички action бутони */
+  .transaction-table button {
+    padding: 6px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+  }
+  
+  /* Edit button */
+  .transaction-table button:nth-child(1) {
+    background-color: #1976d2;
+    color: #ffffff;
+  }
+  
+  .transaction-table button:nth-child(1):hover {
+    background-color: #115293;
+    transform: scale(1.05);
+  }
+  
+  /* Delete button */
+  .transaction-table button:nth-child(2) {
+    background-color: #d32f2f;
+    color: #ffffff;
+  }
+  
+  .transaction-table button:nth-child(2):hover {
+    background-color: #9a0007;
+    transform: scale(1.05);
+  }
+  

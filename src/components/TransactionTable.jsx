@@ -1,15 +1,22 @@
 import { useState } from "react";
 import "./TransactionTable.css";
 import EditTransactionModal from "./EditTransactionModal";
+import DeleteTransactionModal from "./DeleteTransactionModal";
 
 export default function TransactionTable({ transactions, onTransactionUpdate }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editedTransaction, setEditedTransaction] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [transaction, setTransaction] = useState();
 
   const onEditClick = (transactionId) => {
-    setIsModalOpen(true);
+    setIsEditModalOpen(true);
+    const transaction = transactions.find((tx) => tx.id === transactionId);
+    setTransaction(transaction);
+  }
+
+  const onDeleteClick = (transactionId) => {
+    setIsDeleteModalOpen(true);
     const transaction = transactions.find((tx) => tx.id === transactionId);
     setTransaction(transaction);
   }
@@ -32,26 +39,34 @@ export default function TransactionTable({ transactions, onTransactionUpdate }) 
               <td>{tx.description}</td>
               <td
                 className={
-                  tx.amount >= 0 ? "amount-positive" : "amount-negative"
+                  tx.type == 0 ? "amount-positive" : "amount-negative"
                 }
               >
                 {tx.amount}$
               </td>
-              <td>{tx.type}</td>
+              <td>{tx.type == 0 ? "Income" : "Expense"}</td>
               <td>{new Date(tx.date).toLocaleDateString()}</td>
               <td>
                 <button onClick={() => onEditClick(tx.id)}>Edit</button>
-                <button>Delete</button>
+                <button onClick={() => onDeleteClick(tx.id)}>Delete</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      {isModalOpen && (
+      {isEditModalOpen && (
         <EditTransactionModal
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => setIsEditModalOpen(false)}
           transaction={transaction}
           onTransactionUpdate={onTransactionUpdate}
+        />
+      )}
+
+{isDeleteModalOpen && (
+        <DeleteTransactionModal
+          onClose={() => setIsDeleteModalOpen(false)}
+          transaction={transaction}
+          onTransactionDelete={onTransactionUpdate}
         />
       )}
     </div>
