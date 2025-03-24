@@ -97,6 +97,7 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
             <select value={type} onChange={(e) => setType(e.target.value)}>
               <option value="income">Income</option>
               <option value="expense">Expense</option>
+              <option value="transfer">Transfer</option>
             </select>
           </label>
 

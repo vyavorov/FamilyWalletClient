@@ -6,6 +6,17 @@ import DeleteTransactionModal from "./DeleteTransactionModal";
 export default function TransactionTable({ transactions, onTransactionUpdate }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const typeClassMap = {
+    0: "amount-positive",   // Income
+    1: "amount-negative",   // Expense
+    2: "amount-transfer",   // Transfer
+  };
+
+  const typeMap = {
+    0: "Income",   // Income
+    1: "Expense",   // Expense
+    2: "Transfer",   // Transfer
+  };
 
   const [transaction, setTransaction] = useState();
 
@@ -38,13 +49,11 @@ export default function TransactionTable({ transactions, onTransactionUpdate }) 
             <tr key={tx.id}>
               <td>{tx.description}</td>
               <td
-                className={
-                  tx.type == 0 ? "amount-positive" : "amount-negative"
-                }
+                className={typeClassMap[tx.type]}
               >
                 {tx.amount}$
               </td>
-              <td>{tx.type == 0 ? "Income" : "Expense"}</td>
+              <td>{typeMap[tx.type]}</td>
               <td>{new Date(tx.date).toLocaleDateString()}</td>
               <td>
                 <button onClick={() => onEditClick(tx.id)}>Edit</button>

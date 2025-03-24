@@ -15,6 +15,11 @@ export default function EditTransactionModal({ onClose, transaction, onTransacti
   const [accounts, setAccounts] = useState([]);
   const { token } = useContext(AuthContext);
   const [error, setError] = useState('');
+  const typeMap = {
+    0: "income",   // Income
+    1: "expense",   // Expense
+    2: "transfer",   // Transfer
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -96,9 +101,10 @@ export default function EditTransactionModal({ onClose, transaction, onTransacti
           </label>
           <label>
             Type:
-            <select value={type} onChange={(e) => setType(e.target.value)}>
+            <select value={typeMap[transaction.type]} onChange={(e) => setType(e.target.value)}>
               <option value="income">Income</option>
               <option value="expense">Expense</option>
+              <option value="transfer">Transfer</option>
             </select>
           </label>
 
