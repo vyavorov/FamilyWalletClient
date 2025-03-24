@@ -54,3 +54,30 @@ export async function createTransaction(transaction,token) {
     return { success: false, message: "A network error occurred. Please try again." };
   }
 }
+
+export async function editTransaction(transactionId, newTransactionData,token) {
+  try {
+    const decodedUser = jwtDecode(token);
+    const userId = decodedUser["userId"];
+    // const response = await API.put(`${API_URL}/${transactionId}`, {
+    //   transactionDto: newTransactionData, 
+    //   userId
+    // });
+
+    const response = await API.put(`${API_URL}/${transactionId}`, {
+      ...newTransactionData,
+      userId: userId,
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+
+    return response.data;
+  } catch (error) {
+    console.error("Error editing transaction:", error);
+    throw error;
+  }
+}
