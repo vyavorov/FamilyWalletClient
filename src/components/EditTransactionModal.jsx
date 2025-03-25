@@ -4,22 +4,26 @@ import { editTransaction } from "../services/transactionService";
 import { getCategories } from "../services/categoryService";
 import { getAccounts } from "../services/accountService";
 import AuthContext from "../context/AuthContext";
+import Select from "react-select";
 
-export default function EditTransactionModal({ onClose, transaction, onTransactionUpdate}) {
+export default function EditTransactionModal({ onClose, transaction, onTransactionUpdate }) {
   const [description, setDescription] = useState(transaction.description);
   const [amount, setAmount] = useState(transaction.amount);
   const [category, setCategory] = useState(transaction.categoryId);
   const [account, setAccount] = useState(transaction.accountId);
+  const [fromAccount, setFromAccount] = useState(transaction.fromAccountId);
+  const [toAccount, setToAccount] = useState(transaction.toAccountId);
   const [type, setType] = useState(transaction.type);
   const [categories, setCategories] = useState([]);
   const [accounts, setAccounts] = useState([]);
   const { token } = useContext(AuthContext);
-  const [error, setError] = useState('');
-  const typeMap = {
-    0: "income",   // Income
-    1: "expense",   // Expense
-    2: "transfer",   // Transfer
-  };
+  const [error, setError] = useState("");
+
+  const typeOptions = [
+    { value: 0, label: "Income" },
+    { value: 1, label: "Expense" },
+    { value: 2, label: "Transfer" },
+  ];
 
   useEffect(() => {
     async function fetchData() {
@@ -37,14 +41,24 @@ export default function EditTransactionModal({ onClose, transaction, onTransacti
     fetchData();
   }, []);
 
+  const categoryOptions = categories.map((c) => ({
+    value: c.id,
+    label: c.name,
+  }));
+
+  const accountOptions = accounts.map((a) => ({
+    value: a.id,
+    label: `${a.name} — $${a.balance.toFixed(2)}`,
+  }));
+
   async function handleSubmit(e) {
     e.preventDefault();
 
-    if (!description || !amount || !category || !account) {
+    if (!description || !amount || (type !== 2 && !account) || (type === 2 && (!fromAccount || !toAccount))) {
       setError("All fields are required.");
       return;
     }
-    
+
     const transactionData = {
       id: transaction.id,
       description,
@@ -52,25 +66,23 @@ export default function EditTransactionModal({ onClose, transaction, onTransacti
       type,
       categoryId: category || null,
       accountId: account || null,
-      date: new Date().toISOString()
+      date: new Date().toISOString(),
+      fromAccountId: fromAccount || null,
+      toAccountId: toAccount || null,
     };
-    
 
     try {
-      const response = await editTransaction(transaction.id,transactionData,token);
+      const response = await editTransaction(transaction.id, transactionData, token);
       if (response.success) {
-        // onTransactionAdded();
         onClose();
-        setError('');
+        setError("");
         onTransactionUpdate();
-      }
-      else {
+      } else {
         setError(response.message);
         console.log(response.message);
       }
     } catch (error) {
-      console.error("Error creating transaction:", error);
-
+      console.error("Error editing transaction:", error);
     }
   }
 
@@ -99,44 +111,72 @@ export default function EditTransactionModal({ onClose, transaction, onTransacti
               required
             />
           </label>
+
           <label>
             Type:
-            <select value={typeMap[transaction.type]} onChange={(e) => setType(e.target.value)}>
-              <option value="income">Income</option>
-              <option value="expense">Expense</option>
-              <option value="transfer">Transfer</option>
-            </select>
+            <Select
+              className="react-select"
+              classNamePrefix="select"
+              options={typeOptions}
+              value={typeOptions.find((t) => t.value === type)}
+              onChange={(selected) => setType(selected.value)}
+              placeholder="Select type"
+            />
           </label>
 
           <label>
             Category:
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
-              <option value="">Select category</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
+            <Select
+              className="react-select"
+              classNamePrefix="select"
+              options={categoryOptions}
+              value={categoryOptions.find((c) => c.value === category)}
+              onChange={(selected) => setCategory(selected.value)}
+              placeholder="Select category"
+            />
           </label>
 
-          <label>
-            Account:
-            <select
-              value={account}
-              onChange={(e) => setAccount(e.target.value)}
-            >
-              <option value="">Select account</option>
-              {accounts.map((account) => (
-                <option key={account.id} value={account.id}>
-                  {account.name}
-                </option>
-              ))}
-            </select>
-          </label>
+          {type !== 2 && (
+            <label>
+              Account:
+              <Select
+                className="react-select"
+                classNamePrefix="select"
+                options={accountOptions}
+                value={accountOptions.find((a) => a.value === account)}
+                onChange={(selected) => setAccount(selected.value)}
+                placeholder="Select account"
+              />
+            </label>
+          )}
+
+          {type === 2 && (
+            <>
+              <label>
+                From account:
+                <Select
+                  className="react-select"
+                  classNamePrefix="select"
+                  options={accountOptions}
+                  value={accountOptions.find((a) => a.value === fromAccount)}
+                  onChange={(selected) => setFromAccount(selected.value)}
+                  placeholder="Select account"
+                />
+              </label>
+              <label>
+                To account:
+                <Select
+                  className="react-select"
+                  classNamePrefix="select"
+                  options={accountOptions}
+                  value={accountOptions.find((a) => a.value === toAccount)}
+                  onChange={(selected) => setToAccount(selected.value)}
+                  placeholder="Select account"
+                />
+              </label>
+            </>
+          )}
+
           {error && <p className="error-message">{error}</p>}
           <button type="submit">Save</button>
           <button type="button" className="close-btn" onClick={onClose}>
