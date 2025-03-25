@@ -60,3 +60,40 @@
    {
     width: 93% !important;
   }
+
+  .react-select {
+    margin-top: 5px;
+    font-size: 14px;
+  }
+  
+  .select__control {
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    padding: 2px 4px;
+    min-height: 36px;
+  }
+  
+  .select__control--is-focused {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 1px #1976d2;
+  }
+  
+  .select__menu {
+    z-index: 10; /* За да се показва над модала */
+  }
+  
+  .select__option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .select__option--is-selected {
+    background-color: #1976d2;
+    color: white;
+  }
+  
+  .select__option--is-focused {
+    background-color: #e3f2fd;
+  }
+  

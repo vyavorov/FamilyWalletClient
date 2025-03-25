@@ -17,6 +17,7 @@ export async function getTransactions() {
 const TRANSACTION_TYPES = {
   income: 0,  
   expense: 1, 
+  transfer: 2, 
 };
 
 export async function createTransaction(transaction,token) {
@@ -25,7 +26,7 @@ export async function createTransaction(transaction,token) {
     const userId = decodedUser["userId"];
     const response = await API.post(API_URL, {
       ...transaction,
-      type: TRANSACTION_TYPES[transaction.type],
+      // type: TRANSACTION_TYPES[transaction.type],
       userId: userId,
     },
     {
