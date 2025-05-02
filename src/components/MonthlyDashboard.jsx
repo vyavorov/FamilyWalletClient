@@ -30,6 +30,12 @@ const MonthlyDashboard = () => {
 
   console.log("byCategory:", data.byCategory);
 
+  const typeLabels = {
+    0: "Приход",
+    1: "Разход",
+    2: "Трансфер",
+  };
+
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
@@ -96,8 +102,12 @@ const MonthlyDashboard = () => {
         </div>
       )}
 
-<h3>Разходи по категории:</h3>
-      <ResponsiveContainer width="100%" height={300}>
+      <h3>Разходи по категории:</h3>
+      <ResponsiveContainer
+        width="100%"
+        height={300}
+        className="recharts-responsive-container"
+      >
         <PieChart>
           <Pie
             data={chartData}
@@ -122,26 +132,28 @@ const MonthlyDashboard = () => {
       </ResponsiveContainer>
 
       <h3>Транзакции:</h3>
-      <table className="monthly-dashboard-table">
-        <thead>
-          <tr>
-            <th>Описание</th>
-            <th>Сума</th>
-            <th>Тип</th>
-            <th>Дата</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.transactions.map((t) => (
-            <tr key={t.id}>
-              <td>{t.description}</td>
-              <td>{t.amount.toFixed(2)} лв.</td>
-              <td>{t.type === "Income" ? "Приход" : "Разход"}</td>
-              <td>{new Date(t.date).toLocaleDateString("bg-BG")}</td>
+      <div className="table-responsive">
+        <table className="monthly-dashboard-table">
+          <thead>
+            <tr>
+              <th>Описание</th>
+              <th>Сума</th>
+              <th>Тип</th>
+              <th>Дата</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {data.transactions.map((t) => (
+              <tr key={t.id}>
+                <td>{t.description}</td>
+                <td>{t.amount.toFixed(2)} лв.</td>
+                <td>{typeLabels[t.type] || t.type}</td>
+                <td>{new Date(t.date).toLocaleDateString("bg-BG")}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

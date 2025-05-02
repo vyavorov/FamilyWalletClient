@@ -14,6 +14,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  z-index: 10;
 }
 
 .navbar-container {
@@ -21,6 +23,7 @@
   width: 100%;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .logo {
@@ -30,6 +33,7 @@
   text-decoration: none;
 }
 
+/* Стандартно меню */
 .nav-links {
   list-style: none;
   display: flex;
@@ -39,19 +43,46 @@
 }
 
 .nav-links li {
-  display: inline;
+  display: inline-block;
 }
 
 .nav-links a {
   color: white;
   text-decoration: none;
   font-size: 1rem;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
 }
 
+.nav-links a:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Авторизация */
 .auth-buttons {
   display: flex;
   gap: 15px;
   align-items: center;
+}
+
+.username {
+  font-weight: bold;
+}
+
+.logout-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #c0392b;
 }
 
 .auth-link {
@@ -60,6 +91,7 @@
   padding: 5px 10px;
   border: 1px solid white;
   border-radius: 5px;
+  transition: 0.2s;
 }
 
 .auth-link:hover {
@@ -67,26 +99,63 @@
   color: #2c3e50;
 }
 
-.logout-btn {
-  background-color: #e74c3c;
-  color: white;
+/* Бутон за мобилно меню */
+.menu-toggle {
+  display: none;
+  background: none;
   border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
   cursor: pointer;
 }
 
-.logout-btn:hover {
-  background-color: #c0392b;
+.menu-toggle img {
+  width: 26px;
+  height: 26px;
 }
 
-.username {
-  margin-right: 10px;
-  font-weight: bold;
-}
-
-/* Основно съдържание */
+/* Съдържание */
 .main-content {
   flex-grow: 1;
   padding: 20px;
+}
+
+/* Мобилна навигация */
+@media (max-width: 650px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 65px;
+    left: 0;
+    right: 0;
+    background-color: #2c3e50;
+    padding: 15px 20px;
+    z-index: 1000;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .nav-links li {
+    margin: 8px 0;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .auth-buttons .username {
+    display: none;
+  }
+
+  .logout-btn {
+    margin-top: 10px;
+  }
+
+  .monthly-dashboard-container {
+    padding-left:0px !important;
+    padding-right:0px !important;
+  }
 }
