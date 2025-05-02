@@ -10,6 +10,7 @@ import LoginPage from "./pages/LoginPage";
 import PrivateRoute from "./components/PrivateRoute";
 import RegisterPage from "./pages/RegisterPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import MonthlyDashboard from "./components/MonthlyDashboard";
 
 function App() {
   return (
@@ -40,6 +41,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <AccountsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/monthly"
+              element={
+                <ProtectedRoute>
+                  <MonthlyDashboard />
                 </ProtectedRoute>
               }
             />

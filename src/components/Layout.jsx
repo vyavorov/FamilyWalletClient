@@ -24,6 +24,9 @@ export default function Layout({ children }) {
               <li>
                 <Link to="/accounts">Accounts</Link>
               </li>
+              <li>
+                <Link to="/monthly">Monthly</Link>
+              </li>
             </ul>
           )}
 

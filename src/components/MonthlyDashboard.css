@@ -1,0 +1,54 @@
+.monthly-dashboard-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .monthly-dashboard-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .monthly-dashboard-controls {
+    width: 25%;
+    display: inline-block;
+  }
+  
+  .monthly-dashboard-controls label {
+    display: inline-block;
+    font-weight: bold;
+    margin-right: 25px;
+  }
+  
+  .monthly-dashboard-summary {
+    /* background-color: #f9f9f9; */
+    padding: 15px;
+    border-radius: 5px;
+    display: inline-block;
+  }
+
+  .monthly-dashboard-summary p{
+    display: inline-block;
+    margin-right: 25px;
+  }
+  
+  .monthly-dashboard-error {
+    color: red;
+  }
+
+  .monthly-dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .monthly-dashboard-table th,
+  .monthly-dashboard-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .monthly-dashboard-table th {
+    background-color: #f4f4f4;
+    text-align: left;
+  }
+  
