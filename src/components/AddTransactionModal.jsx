@@ -57,13 +57,18 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
   const TRANSACTION_TYPES = {
     income: 0,
     expense: 1,
-    transfer: 2
+    transfer: 2,
   };
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    if (!description || !amount || !category || (!account && !fromAccount && !toAccount)) {
+    if (
+      !description ||
+      !amount ||
+      !category ||
+      (!account && !fromAccount && !toAccount)
+    ) {
       setError("All fields are required.");
       return;
     }
@@ -119,17 +124,38 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
               required
             />
           </label>
-          <label>
-            Type:
-            <Select
-              className="react-select"
-              classNamePrefix="select"
-              options={typeOptions}
-              value={typeOptions.find((t) => t.value === type)}
-              onChange={(selected) => setType(selected.value)}
-              placeholder="Select type"
-            />
-          </label>
+          <Select
+            className="react-select"
+            classNamePrefix="select"
+            options={typeOptions}
+            value={typeOptions.find((t) => t.value === type)}
+            onChange={(selected) => {
+              const newType = selected.value;
+              setType(newType);
+              if (newType === "income") {
+                const salaryCategory = categoryOptions.find(
+                  (c) =>
+                    c.label.toLowerCase() === "заплата" ||
+                    c.label.toLowerCase() === "salary"
+                );
+                if (salaryCategory) {
+                  setCategory(salaryCategory.value);
+                }
+              }
+
+              if (newType === "transfer") {
+                const transferCategory = categoryOptions.find(
+                  (c) =>
+                    c.label.toLowerCase() === "трансфер" ||
+                    c.label.toLowerCase() === "transfer"
+                );
+                if (transferCategory) {
+                  setCategory(transferCategory.value);
+                }
+              }
+            }}
+            placeholder="Select type"
+          />
 
           <label>
             Category:
