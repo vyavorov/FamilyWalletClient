@@ -29,8 +29,6 @@ export default function AccountsPage() {
   }
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
-
   return (
     <div>
       <h1 className="accounts-title">Accounts</h1>
@@ -38,6 +36,8 @@ export default function AccountsPage() {
       <button className="add-account-btn" onClick={() => setIsModalOpen(true)}>
         + Add Account
       </button>
+
+      {error && <p className="error-message">{error}</p>}
 
       <div className="accounts-grid">
         {accounts.map((account) => (

@@ -21,10 +21,13 @@ const MonthlyDashboard = () => {
     transactions: [],
   });
   const [error, setError] = useState(null);
-  const chartData = Object.entries(data.byCategory).map(([key, value]) => ({
-    name: key,
-    value,
-  }));
+  const chartData = data.byCategory
+  ? Object.entries(data.byCategory).map(([key, value]) => ({
+      name: key,
+      value,
+    }))
+  : [];
+
 
   const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7f50", "#a0522d"];
 
@@ -44,7 +47,7 @@ const MonthlyDashboard = () => {
           income: result.income,
           expenses: result.expenses,
           byCategory: result.byCategory,
-          transactions: result.transactions,
+          transactions: result.transactions ?? [],
         });
       } catch (err) {
         setError(err.message);
