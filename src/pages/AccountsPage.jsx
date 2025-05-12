@@ -36,9 +36,6 @@ export default function AccountsPage() {
       <button className="add-account-btn" onClick={() => setIsModalOpen(true)}>
         + Add Account
       </button>
-
-      {error && <p className="error-message">{error}</p>}
-
       <div className="accounts-grid">
         {accounts.map((account) => (
           <AccountCard
