@@ -2,7 +2,7 @@ import axios from "axios";
 import { logout } from "./authService";
 
 const API = axios.create({
-  baseURL: "https://localhost:7271/api",
+  baseURL: "http://213.91.236.205:5095/api",
 });
 
 const getTokenExpiration = (token) => {

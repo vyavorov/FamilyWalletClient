@@ -2,7 +2,7 @@
 import API from "./api";
 
 // const API_URL = "https://localhost:7271/api/Category";
-const API_URL = "http://213.91.236.205:5095/Category";
+const API_URL = "http://213.91.236.205:5095/api/Category";
 
 export async function getCategories() {
   try {

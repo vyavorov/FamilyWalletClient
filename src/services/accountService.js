@@ -3,7 +3,7 @@ import API from "./api";
 import { jwtDecode } from "jwt-decode";
 
 // const API_URL = "https://localhost:7271/api/Account";
-const API_URL = "http://213.91.236.205:5095/Account";
+const API_URL = "http://213.91.236.205:5095/api/Account";
 
 export async function getAccounts() {
   try {

@@ -2,7 +2,7 @@
 import API from "./api";
 
 // const API_URL = "https://localhost:7271/api/Dashboard";
-const API_URL = "http://213.91.236.205:5095/Dashboard";
+const API_URL = "http://213.91.236.205:5095/api/Dashboard";
 
 export async function getDashboardData() {
   try {
