@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/FamilyWalletClient/static/css/main.c066539f.css",
+    "main.js": "/FamilyWalletClient/static/js/main.6fb47716.js",
+    "static/js/453.3aa3847b.chunk.js": "/FamilyWalletClient/static/js/453.3aa3847b.chunk.js",
+    "static/media/logo.svg": "/FamilyWalletClient/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/FamilyWalletClient/index.html",
+    "static/media/menu.svg": "/FamilyWalletClient/static/media/menu.22a05970d93e0f98250a9ec63d516662.svg",
+    "main.c066539f.css.map": "/FamilyWalletClient/static/css/main.c066539f.css.map",
+    "main.6fb47716.js.map": "/FamilyWalletClient/static/js/main.6fb47716.js.map",
+    "453.3aa3847b.chunk.js.map": "/FamilyWalletClient/static/js/453.3aa3847b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c066539f.css",
+    "static/js/main.6fb47716.js"
+  ]
+}
