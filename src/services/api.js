@@ -3,7 +3,11 @@ import { logout } from "./authService";
 
 const API = axios.create({
   baseURL: "http://213.91.236.205:5095/api",
+    // baseURL: "http://localhost:5095/api",
+    // baseURL: "http://localhost:8080/api",
 });
+
+console.log(API.defaults.baseURL)
 
 const getTokenExpiration = (token) => {
   if (!token) return null;
@@ -41,12 +45,19 @@ API.interceptors.request.use((config) => {
 API.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
+    const originalRequest = error.config;
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      !originalRequest.url.includes("/login")
+    ) {
       console.warn("Unauthorized! Logging out...");
       logout();
     }
+
     return Promise.reject(error);
   }
 );
+
 
 export default API;
