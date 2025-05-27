@@ -10,7 +10,7 @@ export default function MonthlyBudgetCard() {
   const [budget, setBudget] = useState(null);
   const now = new Date();
   const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth() + 1; // Months are 0-indexed in JavaScript
+  const currentMonth = now.getMonth() + 1;
   const [formData, setFormData] = useState({
     expectedIncome: "",
     fixedExpenses: "",
@@ -19,10 +19,21 @@ export default function MonthlyBudgetCard() {
     month: currentMonth,
   });
   const [spendToday, setSpendToday] = useState(0);
+  const [spendSoFar, setSpendSoFar] = useState(0);
+
 
   useEffect(() => {
     loadBudget();
   }, []);
+
+  async function fetchSpendSoFar() {
+  try {
+    const response = await API.get("/Transaction/spent-so-far");
+    setSpendSoFar(response.data.total || 0);
+  } catch (error) {
+    console.error("Error fetching total monthly spending:", error);
+  }
+}
 
   async function loadBudget() {
     try {
@@ -37,6 +48,7 @@ export default function MonthlyBudgetCard() {
           month: currentMonth,
         });
         await fetchSpendToday();
+        await fetchSpendSoFar();
       }
     } catch (error) {
       console.error("Error loading budget settings:", error);
@@ -71,8 +83,8 @@ export default function MonthlyBudgetCard() {
     (budget?.expectedIncome || 0) -
     (budget?.fixedExpenses || 0) -
     (budget?.savingGoal || 0);
-  const dailyBudget = spendable / daysLeft;
-  const remaining = spendable - spendToday;
+  const remaining = spendable - spendSoFar;
+  const dailyBudget = remaining / daysLeft;
 
   return (
     <div className="card mt-4 p-4 border rounded shadow-sm">
