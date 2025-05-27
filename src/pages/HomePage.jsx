@@ -3,6 +3,7 @@ import BalanceCard from "../components/BalanceCard";
 import { useEffect, useState } from "react";
 import { getDashboardData } from "../services/dashboardService";
 import AddTransactionModal from "../components/AddTransactionModal";
+import MonthlyBudgetCard from "../components/MonthlyBudgetCard";
 
 export default function HomePage() {
   const [loading, setLoading] = useState(true);
@@ -35,6 +36,7 @@ export default function HomePage() {
         <BalanceCard title="Expenses" amount={dashboardData.expense} type="expense" />
       </div>
 
+    <MonthlyBudgetCard />
       {isModalOpen && <AddTransactionModal onTransactionAdded={updateDashboardData} onClose={() => setIsModalOpen(false)} />}
     </div>
   );
