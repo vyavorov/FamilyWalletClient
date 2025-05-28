@@ -7,15 +7,15 @@ export default function TransactionTable({ transactions, onTransactionUpdate }) 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const typeClassMap = {
-    0: "amount-positive",   // Income
-    1: "amount-negative",   // Expense
-    2: "amount-transfer",   // Transfer
+    0: "amount-positive",
+    1: "amount-negative",
+    2: "amount-transfer",
   };
 
   const typeMap = {
-    0: "Income",   // Income
-    1: "Expense",   // Expense
-    2: "Transfer",   // Transfer
+    0: "Приход",
+    1: "Разход",
+    2: "Трансфер",
   };
 
   const [transaction, setTransaction] = useState();
@@ -37,11 +37,11 @@ export default function TransactionTable({ transactions, onTransactionUpdate }) 
       <table className="transaction-table">
         <thead>
           <tr>
-            <th>Description</th>
-            <th>Amount</th>
-            <th>Type</th>
-            <th>Date</th>
-            <th>Actions</th>
+            <th>Описание</th>
+            <th>Сума</th>
+            <th>Тип</th>
+            <th>Дата</th>
+            <th>Действия</th>
           </tr>
         </thead>
         <tbody>
@@ -56,8 +56,8 @@ export default function TransactionTable({ transactions, onTransactionUpdate }) 
               <td>{typeMap[tx.type]}</td>
               <td>{new Date(tx.date).toLocaleDateString()}</td>
               <td>
-                <button onClick={() => onEditClick(tx.id)}>Edit</button>
-                <button onClick={() => onDeleteClick(tx.id)}>Delete</button>
+                <button onClick={() => onEditClick(tx.id)}>Редактирай</button>
+                <button onClick={() => onDeleteClick(tx.id)}>Изтрий</button>
               </td>
             </tr>
           ))}

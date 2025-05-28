@@ -13,26 +13,26 @@ export default function Layout({ children }) {
       <nav className="navbar">
         <div className="navbar-container">
           <Link to="/" className="logo">
-            Wallet
+            Портфейл
           </Link>
 
           {user && (
             <>
               <div className={`nav-links ${isMobileMenuOpen ? "show" : ""}`}>
                 <Link to="/" onClick={() => setMobileMenuOpen(false)}>
-                  Home
+                  Начало
                 </Link>
                 <Link
                   to="/transactions"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Transactions
+                  Транзакции
                 </Link>
                 <Link to="/accounts" onClick={() => setMobileMenuOpen(false)}>
-                  Accounts
+                  Сметки
                 </Link>
                 <Link to="/monthly" onClick={() => setMobileMenuOpen(false)}>
-                  Monthly
+                  Месечен отчет
                 </Link>
               </div>
 
@@ -50,16 +50,16 @@ export default function Layout({ children }) {
               <>
                 <span className="username">{user.email}</span>
                 <button className="logout-btn" onClick={logout}>
-                  Logout
+                  Изход
                 </button>
               </>
             ) : (
               <>
                 <Link to="/login" className="auth-link">
-                  Login
+                  Вход
                 </Link>
                 <Link to="/register" className="auth-link">
-                  Register
+                  Регистрация
                 </Link>
               </>
             )}

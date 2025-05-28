@@ -29,14 +29,14 @@ export default function HomePage() {
 
   return (
     <div>
-      <h1 className="dashboard-title">Dashboard</h1>
+      <h1 className="dashboard-title">Дашборд</h1>
 
-      <button className="add-transaction-btn" onClick={() => setIsModalOpen(true)}>+ Add Transaction</button>
+      <button className="add-transaction-btn" onClick={() => setIsModalOpen(true)}>+ Добави транзакция</button>
 
       <div className="dashboard-cards">
-        <BalanceCard title="Total Balance" amount={dashboardData.totalBalance} type="total" />
-        <BalanceCard title="Income" amount={dashboardData.income} type="income" />
-        <BalanceCard title="Expenses" amount={dashboardData.expense} type="expense" />
+        <BalanceCard title="Баланс" amount={dashboardData.totalBalance} type="total" />
+        <BalanceCard title="Приходи" amount={dashboardData.income} type="income" />
+        <BalanceCard title="Разходи" amount={dashboardData.expense} type="expense" />
       </div>
 
     <MonthlyBudgetCard refreshTrigger={refreshKey}/>

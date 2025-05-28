@@ -31,10 +31,10 @@ export default function AccountsPage() {
   if (loading) return <p>Loading...</p>;
   return (
     <div>
-      <h1 className="accounts-title">Accounts</h1>
+      <h1 className="accounts-title">Сметки</h1>
 
       <button className="add-account-btn" onClick={() => setIsModalOpen(true)}>
-        + Add Account
+        + Добави сметка
       </button>
       <div className="accounts-grid">
         {accounts.map((account) => (
