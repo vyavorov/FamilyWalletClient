@@ -17,7 +17,7 @@ export async function getCategories() {
 
 export async function addCategory(category) {
   try {
-    const response = await API.post("http://localhost:8080/api/Category", category);
+    const response = await API.post(API_URL, category);
     return response.data.data;
   } catch (error) {
     console.error("Error adding category:", error);
