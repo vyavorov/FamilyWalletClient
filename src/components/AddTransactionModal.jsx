@@ -1,10 +1,11 @@
 import { useState, useEffect, useContext } from "react";
 import "./AddTransactionModal.css";
 import { createTransaction } from "../services/transactionService";
-import { getCategories } from "../services/categoryService";
+import { getCategories, addCategory } from "../services/categoryService";
 import { getAccounts } from "../services/accountService";
 import AuthContext from "../context/AuthContext";
 import Select from "react-select";
+import { jwtDecode } from "jwt-decode";
 
 export default function AddTransactionModal({ onClose, onTransactionAdded }) {
   const [description, setDescription] = useState("");
@@ -13,11 +14,13 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
   const [account, setAccount] = useState("");
   const [fromAccount, setFromAccount] = useState("");
   const [toAccount, setToAccount] = useState("");
-  const [type, setType] = useState("expense");
+  const [type, setType] = useState("разход");
   const [categories, setCategories] = useState([]);
   const [accounts, setAccounts] = useState([]);
   const { token } = useContext(AuthContext);
   const [error, setError] = useState("");
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -40,24 +43,26 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
     label: c.name,
   }));
 
+  const categoryOptionsWithAdd = [
+    ...categoryOptions,
+    { value: "__add_new__", label: "➕ Добави нова категория" },
+  ];
+
   const accountOptions = accounts.map((a) => ({
     value: a.id,
     label: `${a.name} — $${a.balance.toFixed(2)}`,
   }));
 
-  const fromAccountOptions = accountOptions;
-  const toAccountOptions = accountOptions;
-
   const typeOptions = [
-    { value: "income", label: "Income" },
-    { value: "expense", label: "Expense" },
-    { value: "transfer", label: "Transfer" },
+    { value: "приход", label: "Приход" },
+    { value: "разход", label: "Разход" },
+    { value: "трансфер", label: "Трансфер" },
   ];
 
   const TRANSACTION_TYPES = {
-    income: 0,
-    expense: 1,
-    transfer: 2,
+    приход: 0,
+    разход: 1,
+    трансфер: 2,
   };
 
   async function handleSubmit(e) {
@@ -99,13 +104,33 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
     }
   }
 
+  async function handleAddCategory() {
+    const decodedToken = jwtDecode(token);
+    const newCat = {
+      name: newCategoryName,
+      userId: decodedToken.userId,
+      familyGroupId: decodedToken.familyGroupId,
+    };
+
+    try {
+      const createdCategory = await addCategory(newCat);
+      const updatedCategories = await getCategories();
+      setCategories(updatedCategories);
+      setCategory(createdCategory.id);
+      setShowCategoryModal(false);
+      setNewCategoryName("");
+    } catch (err) {
+      console.error("Error adding category:", err);
+    }
+  }
+
   return (
     <div className="modal-overlay">
       <div className="modal-content">
         <h2>Add Transaction</h2>
         <form onSubmit={handleSubmit}>
           <label>
-            Description:
+            Описание:
             <input
               className="transaction-description"
               type="text"
@@ -115,7 +140,7 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
             />
           </label>
           <label>
-            Amount:
+            Сума:
             <input
               className="transaction-amount"
               type="number"
@@ -132,7 +157,7 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
             onChange={(selected) => {
               const newType = selected.value;
               setType(newType);
-              if (newType === "income") {
+              if (newType === "приход" || newType === "income") {
                 const salaryCategory = categoryOptions.find(
                   (c) =>
                     c.label.toLowerCase() === "заплата" ||
@@ -142,8 +167,7 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
                   setCategory(salaryCategory.value);
                 }
               }
-
-              if (newType === "transfer") {
+              if (newType === "трансфер" || newType === "transfer") {
                 const transferCategory = categoryOptions.find(
                   (c) =>
                     c.label.toLowerCase() === "трансфер" ||
@@ -154,24 +178,30 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
                 }
               }
             }}
-            placeholder="Select type"
+            placeholder="Избери тип"
           />
 
           <label>
-            Category:
+            Категория:
             <Select
               className="react-select"
               classNamePrefix="select"
-              options={categoryOptions}
-              value={categoryOptions.find((c) => c.value === category)}
-              onChange={(selected) => setCategory(selected.value)}
+              options={categoryOptionsWithAdd}
+              value={categoryOptionsWithAdd.find((c) => c.value === category)}
+              onChange={(selected) => {
+                if (selected.value === "__add_new__") {
+                  setShowCategoryModal(true);
+                } else {
+                  setCategory(selected.value);
+                }
+              }}
               placeholder="Select category"
             />
           </label>
 
           {type !== "transfer" && (
             <label>
-              Account:
+              Сметка:
               <Select
                 className="react-select"
                 classNamePrefix="select"
@@ -186,39 +216,53 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
           {type === "transfer" && (
             <>
               <label>
-                From account:
+                От сметка:
                 <Select
                   className="react-select"
                   classNamePrefix="select"
-                  options={fromAccountOptions}
-                  value={fromAccountOptions.find(
-                    (a) => a.value === fromAccount
-                  )}
+                  options={accountOptions}
+                  value={accountOptions.find((a) => a.value === fromAccount)}
                   onChange={(selected) => setFromAccount(selected.value)}
-                  placeholder="Select account"
+                  placeholder="Избери от сметка"
                 />
               </label>
 
               <label>
-                To account:
+                Към сметка:
                 <Select
                   className="react-select"
                   classNamePrefix="select"
-                  options={toAccountOptions}
-                  value={toAccountOptions.find((a) => a.value === toAccount)}
+                  options={accountOptions}
+                  value={accountOptions.find((a) => a.value === toAccount)}
                   onChange={(selected) => setToAccount(selected.value)}
-                  placeholder="Select account"
+                  placeholder="Избери към сметка"
                 />
               </label>
             </>
           )}
 
           {error && <p className="error-message">{error}</p>}
-          <button type="submit">Save</button>
+          <button type="submit">Запази</button>
           <button type="button" className="close-btn" onClick={onClose}>
-            Cancel
+            Откажи
           </button>
         </form>
+
+        {showCategoryModal && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h3>Добави нова категория</h3>
+              <input
+                type="text"
+                placeholder="Category name"
+                value={newCategoryName}
+                onChange={(e) => setNewCategoryName(e.target.value)}
+              />
+              <button onClick={handleAddCategory}>Add</button>
+              <button onClick={() => setShowCategoryModal(false)}>Cancel</button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
