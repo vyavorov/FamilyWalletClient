@@ -1,10 +1,11 @@
 import { useState, useEffect, useContext } from "react";
 import "./AddTransactionModal.css";
 import { createTransaction } from "../services/transactionService";
-import { getCategories } from "../services/categoryService";
+import { getCategories, addCategory } from "../services/categoryService";
 import { getAccounts } from "../services/accountService";
 import AuthContext from "../context/AuthContext";
 import Select from "react-select";
+import { jwtDecode } from "jwt-decode";
 
 export default function AddTransactionModal({ onClose, onTransactionAdded }) {
   const [description, setDescription] = useState("");
@@ -18,6 +19,8 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
   const [accounts, setAccounts] = useState([]);
   const { token } = useContext(AuthContext);
   const [error, setError] = useState("");
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -40,13 +43,15 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
     label: c.name,
   }));
 
+  const categoryOptionsWithAdd = [
+    ...categoryOptions,
+    { value: "__add_new__", label: "➕ Add new category" },
+  ];
+
   const accountOptions = accounts.map((a) => ({
     value: a.id,
     label: `${a.name} — $${a.balance.toFixed(2)}`,
   }));
-
-  const fromAccountOptions = accountOptions;
-  const toAccountOptions = accountOptions;
 
   const typeOptions = [
     { value: "income", label: "Income" },
@@ -99,6 +104,26 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
     }
   }
 
+  async function handleAddCategory() {
+    const decodedToken = jwtDecode(token);
+    const newCat = {
+      name: newCategoryName,
+      userId: decodedToken.userId,
+      familyGroupId: decodedToken.familyGroupId,
+    };
+
+    try {
+      const createdCategory = await addCategory(newCat);
+      const updatedCategories = await getCategories();
+      setCategories(updatedCategories);
+      setCategory(createdCategory.id);
+      setShowCategoryModal(false);
+      setNewCategoryName("");
+    } catch (err) {
+      console.error("Error adding category:", err);
+    }
+  }
+
   return (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -142,7 +167,6 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
                   setCategory(salaryCategory.value);
                 }
               }
-
               if (newType === "transfer") {
                 const transferCategory = categoryOptions.find(
                   (c) =>
@@ -162,9 +186,15 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
             <Select
               className="react-select"
               classNamePrefix="select"
-              options={categoryOptions}
-              value={categoryOptions.find((c) => c.value === category)}
-              onChange={(selected) => setCategory(selected.value)}
+              options={categoryOptionsWithAdd}
+              value={categoryOptionsWithAdd.find((c) => c.value === category)}
+              onChange={(selected) => {
+                if (selected.value === "__add_new__") {
+                  setShowCategoryModal(true);
+                } else {
+                  setCategory(selected.value);
+                }
+              }}
               placeholder="Select category"
             />
           </label>
@@ -190,10 +220,8 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
                 <Select
                   className="react-select"
                   classNamePrefix="select"
-                  options={fromAccountOptions}
-                  value={fromAccountOptions.find(
-                    (a) => a.value === fromAccount
-                  )}
+                  options={accountOptions}
+                  value={accountOptions.find((a) => a.value === fromAccount)}
                   onChange={(selected) => setFromAccount(selected.value)}
                   placeholder="Select account"
                 />
@@ -204,8 +232,8 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
                 <Select
                   className="react-select"
                   classNamePrefix="select"
-                  options={toAccountOptions}
-                  value={toAccountOptions.find((a) => a.value === toAccount)}
+                  options={accountOptions}
+                  value={accountOptions.find((a) => a.value === toAccount)}
                   onChange={(selected) => setToAccount(selected.value)}
                   placeholder="Select account"
                 />
@@ -219,6 +247,22 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
             Cancel
           </button>
         </form>
+
+        {showCategoryModal && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h3>Add New Category</h3>
+              <input
+                type="text"
+                placeholder="Category name"
+                value={newCategoryName}
+                onChange={(e) => setNewCategoryName(e.target.value)}
+              />
+              <button onClick={handleAddCategory}>Add</button>
+              <button onClick={() => setShowCategoryModal(false)}>Cancel</button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
