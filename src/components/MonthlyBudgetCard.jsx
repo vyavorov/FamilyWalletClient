@@ -6,7 +6,7 @@ import {
 import moment from "moment";
 import API from "../services/api";
 
-export default function MonthlyBudgetCard() {
+export default function MonthlyBudgetCard({ refreshTrigger }) {
   const [budget, setBudget] = useState(null);
   const now = new Date();
   const currentYear = now.getFullYear();
@@ -24,7 +24,7 @@ export default function MonthlyBudgetCard() {
 
   useEffect(() => {
     loadBudget();
-  }, []);
+  }, [refreshTrigger]);
 
   async function fetchSpendSoFar() {
   try {

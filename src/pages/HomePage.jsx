@@ -10,11 +10,14 @@ export default function HomePage() {
   const [error, setError] = useState(null);
   const [dashboardData, setDashboardData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   async function updateDashboardData() {
     try {
       const data = await getDashboardData();
       setDashboardData(data);
+      setRefreshKey(prev => prev + 1);
+
     } catch (err) {
       console.error("Error updating dashboard data:", err);
     }
@@ -36,7 +39,7 @@ export default function HomePage() {
         <BalanceCard title="Expenses" amount={dashboardData.expense} type="expense" />
       </div>
 
-    <MonthlyBudgetCard />
+    <MonthlyBudgetCard refreshTrigger={refreshKey}/>
       {isModalOpen && <AddTransactionModal onTransactionAdded={updateDashboardData} onClose={() => setIsModalOpen(false)} />}
     </div>
   );
