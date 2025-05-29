@@ -21,3 +21,13 @@ export async function setOrUpdateBudgetSettings(data) {
     throw error;
   }
 }
+
+export async function getBudgetOverview() {
+  try {
+    const response = await API.get(`${API_URL}/overview`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching budget overview:", error);
+    throw error;
+  }
+}

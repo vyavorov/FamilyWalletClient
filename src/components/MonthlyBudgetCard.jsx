@@ -2,38 +2,27 @@ import { useEffect, useState } from "react";
 import {
   getCurrentBudgetSettings,
   setOrUpdateBudgetSettings,
+  getBudgetOverview,
 } from "../services/monthlyBudgetService";
 import moment from "moment";
 import API from "../services/api";
 
 export default function MonthlyBudgetCard({ refreshTrigger }) {
   const [budget, setBudget] = useState(null);
+  const [overview, setOverview] = useState(null);
   const now = new Date();
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth() + 1;
   const [formData, setFormData] = useState({
-    expectedIncome: "",
-    fixedExpenses: "",
     savingGoal: "",
     year: currentYear,
     month: currentMonth,
   });
   const [spendToday, setSpendToday] = useState(0);
-  const [spendSoFar, setSpendSoFar] = useState(0);
-
 
   useEffect(() => {
     loadBudget();
   }, [refreshTrigger]);
-
-  async function fetchSpendSoFar() {
-  try {
-    const response = await API.get("/Transaction/spent-so-far");
-    setSpendSoFar(response.data.total || 0);
-  } catch (error) {
-    console.error("Error fetching total monthly spending:", error);
-  }
-}
 
   async function loadBudget() {
     try {
@@ -41,17 +30,18 @@ export default function MonthlyBudgetCard({ refreshTrigger }) {
       if (data) {
         setBudget(data);
         setFormData({
-          expectedIncome: data.expectedIncome,
-          fixedExpenses: data.fixedExpenses,
           savingGoal: data.savingGoal,
           year: currentYear,
           month: currentMonth,
         });
-        await fetchSpendToday();
-        await fetchSpendSoFar();
       }
+
+      const overviewData = await getBudgetOverview();
+      setOverview(overviewData);
+
+      await fetchSpendToday();
     } catch (error) {
-      console.error("Error loading budget settings:", error);
+      console.error("Error loading budget settings or overview:", error);
     }
   }
 
@@ -75,46 +65,11 @@ export default function MonthlyBudgetCard({ refreshTrigger }) {
     }
   }
 
-  const today = moment();
-  const daysInMonth = today.daysInMonth();
-  const daysLeft = daysInMonth - today.date() + 1;
-
-  const spendable =
-    (budget?.expectedIncome || 0) -
-    (budget?.fixedExpenses || 0) -
-    (budget?.savingGoal || 0);
-  const remaining = spendable - spendSoFar;
-  const dailyBudget = remaining / daysLeft;
-
   return (
     <div className="card mt-4 p-4 border rounded shadow-sm">
       {!budget ? (
         <form onSubmit={handleSubmit}>
-          <h4 className="mb-3">Въведи месечен бюджет</h4>
-          <div className="form-group">
-            <label>Очакван приход</label>
-            <input
-              type="number"
-              className="form-control"
-              value={formData.expectedIncome}
-              onChange={(e) =>
-                setFormData({ ...formData, expectedIncome: +e.target.value })
-              }
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Сметки (фиксирани разходи)</label>
-            <input
-              type="number"
-              className="form-control"
-              value={formData.fixedExpenses}
-              onChange={(e) =>
-                setFormData({ ...formData, fixedExpenses: +e.target.value })
-              }
-              required
-            />
-          </div>
+          <h4 className="mb-3">Задай цел за спестяване</h4>
           <div className="form-group">
             <label>Цел за спестяване</label>
             <input
@@ -137,14 +92,19 @@ export default function MonthlyBudgetCard({ refreshTrigger }) {
           <p>
             💸 Изхарчено днес: <strong>{spendToday.toFixed(2)} лв</strong>
           </p>
-          <p>
-            🎯 Дневен бюджет: <strong>{dailyBudget.toFixed(2)} лв</strong>
-          </p>
-          <p>
-            📉 Оставащи средства за месеца:{" "}
-            <strong>{remaining.toFixed(2)} лв</strong>
-          </p>
-          <p>📆 Оставащи дни: {daysLeft}</p>
+          {overview && (
+            <>
+              <p>
+                🎯 Дневен бюджет:{" "}
+                <strong>{overview.dailyBudget.toFixed(2)} лв</strong>
+              </p>
+              <p>
+                📉 Оставащи средства за месеца:{" "}
+                <strong>{overview.remainingAmount.toFixed(2)} лв</strong>
+              </p>
+              <p>📆 Оставащи дни: {overview.daysLeft}</p>
+            </>
+          )}
         </div>
       )}
     </div>
