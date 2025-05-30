@@ -199,7 +199,7 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
             />
           </label>
 
-          {type !== "transfer" && (
+          {type !== "трансфер" && (
             <label>
               Сметка:
               <Select
