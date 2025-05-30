@@ -213,7 +213,7 @@ export default function AddTransactionModal({ onClose, onTransactionAdded }) {
             </label>
           )}
 
-          {type === "transfer" && (
+          {type === "трансфер" && (
             <>
               <label>
                 От сметка:
