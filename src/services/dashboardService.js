@@ -7,7 +7,7 @@ const API_URL = "http://213.91.236.205:5095/api/Dashboard";
 
 export async function getDashboardData() {
   try {
-    const response = await API.get(API_URL);
+    const response = await API.get(API_URL + "/summary");
     return response.data;
   } catch (err) {
     console.error("Dashboard data fetch failed:", err.message);
