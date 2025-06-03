@@ -33,11 +33,14 @@ export default function HomePage() {
 
       <button className="add-transaction-btn" onClick={() => setIsModalOpen(true)}>+ Добави транзакция</button>
 
-      <div className="dashboard-cards">
-        <BalanceCard title="Баланс (без спестявания)" amount={dashboardData.balanceWithoutSavingGoal} type="total" />
-        <BalanceCard title="Приходи за месеца" amount={dashboardData.income} type="income" />
-        <BalanceCard title="Разходи за месеца" amount={dashboardData.expense} type="expense" />
-      </div>
+<div className="dashboard-cards">
+  <BalanceCard title="Баланс (без спестявания)" amount={dashboardData.balanceWithoutSavingGoal} type="total" />
+  <BalanceCard title="Приходи за месеца" amount={dashboardData.income} type="income" />
+  <BalanceCard title="Разходи за месеца" amount={dashboardData.expense} type="expense" />
+  {/* <BalanceCard title="🎯 Желана цел за спестяване" amount={dashboardData.savingGoal} type="neutral" />
+  <BalanceCard title="💰 Спестено досега" amount={dashboardData.realSavings} type="neutral" /> */}
+</div>
+
 
     <MonthlyBudgetCard refreshTrigger={refreshKey}/>
       {isModalOpen && <AddTransactionModal onTransactionAdded={updateDashboardData} onClose={() => setIsModalOpen(false)} />}
