@@ -105,6 +105,9 @@ export default function MonthlyBudgetCard({ refreshTrigger }) {
               <p>📆 Оставащи дни: {overview.daysLeft}</p>
             </>
           )}
+                    <p>
+            💸 Спестено за месеца: <strong>{savingGoal.toFixed(2)} лв</strong>
+          </p>
         </div>
       )}
     </div>
