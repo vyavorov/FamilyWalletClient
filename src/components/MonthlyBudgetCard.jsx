@@ -103,11 +103,12 @@ export default function MonthlyBudgetCard({ refreshTrigger }) {
                 <strong>{overview.remainingAmount.toFixed(2)} лв</strong>
               </p>
               <p>📆 Оставащи дни: {overview.daysLeft}</p>
+              <p>
+                💸 Спестено за месеца:{" "}
+                <strong>{overview.savingGoal.toFixed(2)} лв</strong>
+              </p>
             </>
           )}
-          <p>
-            💸 Спестено за месеца: <strong>{overview.savingGoal.toFixed(2)} лв</strong>
-          </p>
         </div>
       )}
     </div>
