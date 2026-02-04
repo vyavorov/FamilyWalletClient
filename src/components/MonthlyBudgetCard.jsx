@@ -90,26 +90,26 @@ export default function MonthlyBudgetCard({ refreshTrigger }) {
         <div>
           <h5>📅 Месечен бюджет</h5>
           <p>
-            💸 Изхарчено днес: <strong>{spendToday.toFixed(2)} лв</strong>
+            💸 Изхарчено днес: <strong>{spendToday.toFixed(2)} €</strong>
           </p>
           {overview && (
             <>
               <p>
                 🎯 Дневен бюджет:{" "}
-                <strong>{overview.dailyBudget.toFixed(2)} лв</strong>
+                <strong>{overview.dailyBudget.toFixed(2)} €</strong>
               </p>
               <p>
                 📉 Оставащи средства за месеца:{" "}
-                <strong>{overview.remainingAmount.toFixed(2)} лв</strong>
+                <strong>{overview.remainingAmount.toFixed(2)} €</strong>
               </p>
               <p>📆 Оставащи дни: {overview.daysLeft}</p>
               <p>
                 🎯 Заложена цел:{" "}
-                <strong>{budget.savingGoal.toFixed(2)} лв</strong>
+                <strong>{budget.savingGoal.toFixed(2)} €</strong>
               </p>
               <p>
                 💰 Реално спестено:{" "}
-                <strong>{overview.totalSavings.toFixed(2)} лв</strong>
+                <strong>{overview.totalSavings.toFixed(2)} €</strong>
               </p>
             </>
           )}

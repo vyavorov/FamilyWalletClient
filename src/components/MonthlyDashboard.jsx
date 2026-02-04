@@ -99,9 +99,9 @@ const MonthlyDashboard = () => {
         <p className="monthly-dashboard-error">Грешка: {error}</p>
       ) : (
         <div className="monthly-dashboard-summary">
-          <p>Приходи: {data.income.toFixed(2)} лв.</p>
-          <p>Разходи: {data.expenses.toFixed(2)} лв.</p>
-          <p>Спестено: {saved.toFixed(2)} лв.</p>
+          <p>Приходи: {data.income.toFixed(2)} €</p>
+          <p>Разходи: {data.expenses.toFixed(2)} €</p>
+          <p>Спестено: {saved.toFixed(2)} €</p>
         </div>
       )}
 
@@ -149,7 +149,7 @@ const MonthlyDashboard = () => {
             {data.transactions.map((t) => (
               <tr key={t.id}>
                 <td>{t.description}</td>
-                <td>{t.amount.toFixed(2)} лв.</td>
+                <td>{t.amount.toFixed(2)} €</td>
                 <td>{typeLabels[t.type] || t.type}</td>
                 <td>{new Date(t.date).toLocaleDateString("bg-BG")}</td>
               </tr>
